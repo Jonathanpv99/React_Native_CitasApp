@@ -1,21 +1,18 @@
-
-import React from 'react';
+import React, {useState} from 'react';
 import {
-  Button,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
-  View,
   Pressable,
 } from 'react-native';
+import Formulario from './src/components/Formulario';
 
 function App(): React.JSX.Element {
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   const handleNuevaCita = () => {
-    console.log('Presionaste un botón');
+    setModalVisible(true);
   };
 
   return (
@@ -29,7 +26,9 @@ function App(): React.JSX.Element {
       >
         <Text style={styles.textoNuevaCita}>Nuevo Evento</Text>
       </Pressable>
-      
+      <Formulario
+        modalVisible={modalVisible}
+      />
     </SafeAreaView>
   );
 }
@@ -44,13 +43,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#374151',
     fontWeight: '600',
-    marginTop: 10,
+    marginTop: 30,
   },
   tituloBold: {
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '900',
     color: '#6D28D9',
+    marginTop: 10,
   },
   btnNuevaCita: {
     backgroundColor: '#6D28D9',
