@@ -11,8 +11,8 @@ function App(): React.JSX.Element {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleNuevaCita = () => {
-    setModalVisible(true);
+  const handleViewModalCita = () => {
+    setModalVisible(!modalVisible);
   };
 
   return (
@@ -21,13 +21,14 @@ function App(): React.JSX.Element {
       <Text style={styles.tituloBold}>Veterinaria</Text>
 
       <Pressable
-        onPress={handleNuevaCita}
+        onPress={handleViewModalCita}
         style={styles.btnNuevaCita}
       >
         <Text style={styles.textoNuevaCita}>Nuevo Evento</Text>
       </Pressable>
       <Formulario
-        modalVisible={modalVisible}
+        isVisible={modalVisible}
+        changeVisible={handleViewModalCita}
       />
     </SafeAreaView>
   );

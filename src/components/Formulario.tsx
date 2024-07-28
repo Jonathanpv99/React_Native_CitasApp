@@ -7,11 +7,21 @@ import {
   View,
   TextInput,
   ScrollView,
+  Pressable,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
-function Formulario({modalVisible}): React.JSX.Element {
+function Formulario({isVisible, changeVisible}): React.JSX.Element {
+
+  const [paciente, setPaciente] = useState('');
+  const [propietario, setPropietario] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [fecha, setFecha] = useState(new Date());
+  const [sintomas, setSintomas] = useState('');
+
   return (
-    <Modal animationType="slide" visible={modalVisible}>
+    <Modal animationType="slide" visible={isVisible}>
       <SafeAreaView style={styles.contenido}>
         <ScrollView>
           <Text style={styles.titulo}>
@@ -19,48 +29,79 @@ function Formulario({modalVisible}): React.JSX.Element {
             <Text style={styles.tituloBold}>Cita</Text>
           </Text>
 
+          <Pressable 
+            style={styles.btnCancelar}
+            onLongPress={() => changeVisible()}
+          >
+            <Text style={styles.textCancelar}>Cancelar X</Text>
+          </Pressable>
+
           <View style={styles.campo}>
             <Text style={styles.label}>Nombre Paciente</Text>
             <TextInput
+              style={styles.input}
               keyboardType="default"
               placeholder="Milanezo"
               placeholderTextColor={'#666'}
-              style={styles.input}
+              value={paciente}
+              onChange={setPaciente}
             />
           </View>
           <View style={styles.campo}>
             <Text style={styles.label}>Nombre Propietario</Text>
             <TextInput
+              style={styles.input}
               keyboardType="default"
               placeholder="Propietario"
               placeholderTextColor={'#666'}
-              style={styles.input}
+              value={propietario}
+              onChange={setPropietario}
             />
           </View>
           <View style={styles.campo}>
             <Text style={styles.label}>Email Propietario</Text>
             <TextInput
-              keyboardType="email-address"
-              placeholder="solobino@gmail.com"
-              placeholderTextColor={'#666'}
               style={styles.input}
+              keyboardType="email-address"
+              placeholder="Solobino@gmail.com"
+              placeholderTextColor={'#666'}
+              value={email}
+              onChange={setEmail}
             />
           </View>
           <View style={styles.campo}>
             <Text style={styles.label}>Telefono Propietario</Text>
             <TextInput
+              style={styles.input}
               keyboardType="phone-pad"
               placeholder="Telefono Propietario"
               placeholderTextColor={'#666'}
-              style={styles.input}
+              value={telefono}
+              onChange={setTelefono}
+              maxLength={10}
             />
+          </View>
+          <View style={styles.campo}>
+            <Text style={styles.label}>Fecha Citas</Text>
+            <View
+              style={styles.contenedorFecha}
+            >
+              <DatePicker
+                date={fecha}
+                onDateChange={(date) => setFecha(date)}
+              />
+            </View>
           </View>
           <View style={styles.campo}>
             <Text style={styles.label}>Sintomas Paciente</Text>
             <TextInput
+              style={styles.input}
               placeholder="Sintomas Paciente"
               placeholderTextColor={'#666'}
-              style={styles.input}
+              value={sintomas}
+              onChange={setSintomas}
+              multiline={true}
+              numberOfLines={4}
             />
           </View>
         </ScrollView>
@@ -84,6 +125,22 @@ const styles = StyleSheet.create({
   tituloBold: {
     fontWeight: '900',
   },
+  btnCancelar:{
+    marginTop: 20,
+    backgroundColor: '#5827A4',
+    marginHorizontal: 30,
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  textCancelar: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: '900',
+    fontSize: 15,
+    textTransform: 'uppercase',
+  },
   campo: {
     marginTop: 10,
     marginHorizontal: 30,
@@ -91,12 +148,17 @@ const styles = StyleSheet.create({
   label: {
     color: '#fff',
     paddingVertical: 15,
+    paddingHorizontal: 5,
     fontSize: 15,
     fontWeight: '600',
   },
   input: {
     backgroundColor: '#fff',
-    padding: 15,
+    color: '#000',
+    padding: 10,
+    borderRadius: 10,
+  },
+  contenedorFecha: {
     borderRadius: 10,
   },
 });
