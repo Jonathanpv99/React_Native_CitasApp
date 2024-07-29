@@ -4,12 +4,15 @@ import {
   StyleSheet,
   Text,
   Pressable,
+  FlatList,
 } from 'react-native';
 import Formulario from './src/components/Formulario';
 
 function App(): React.JSX.Element {
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [pacientes, setPacientes] = useState([]);
+
 
   const handleViewModalCita = () => {
     setModalVisible(!modalVisible);
@@ -26,9 +29,15 @@ function App(): React.JSX.Element {
       >
         <Text style={styles.textoNuevaCita}>Nuevo Evento</Text>
       </Pressable>
+      {pacientes.length === 0 ? 
+        (<Text style={styles.noRegistros}>No se encontraron Pacientes</Text>) :
+        (<Text style={styles.noRegistros}>Si hay Pacientes</Text>)
+      }
       <Formulario
         isVisible={modalVisible}
         changeVisible={handleViewModalCita}
+        pacientes={pacientes}
+        setPacientes={setPacientes}
       />
     </SafeAreaView>
   );
@@ -66,6 +75,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '900',
     textTransform: 'uppercase',
+  },
+  noRegistros: {
+    marginTop: 40,
+    textAlign: 'center',
+    fontWeight: '600',
+    color: '#000',
+    fontSize: 15,
   },
 });
 

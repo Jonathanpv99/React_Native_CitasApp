@@ -8,10 +8,11 @@ import {
   TextInput,
   ScrollView,
   Pressable,
+  Alert,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-function Formulario({isVisible, changeVisible}): React.JSX.Element {
+function Formulario({isVisible, changeVisible,pacientes, setPacientes}): React.JSX.Element {
 
   const [paciente, setPaciente] = useState('');
   const [propietario, setPropietario] = useState('');
@@ -19,6 +20,37 @@ function Formulario({isVisible, changeVisible}): React.JSX.Element {
   const [telefono, setTelefono] = useState('');
   const [fecha, setFecha] = useState(new Date());
   const [sintomas, setSintomas] = useState('');
+
+  const handleNuevaCita = () => {
+    if([paciente, propietario, email, telefono, sintomas].includes('')){
+      Alert.alert(
+        'Error',
+        'Llena los campos son obligatorios',
+        [{text: 'Ok'}]
+      );
+    
+      return
+    }
+
+    const nuevoPaciente = {
+      paciente, 
+      propietario, 
+      email, 
+      telefono,
+      fecha,
+      sintomas,
+    }
+
+    setPacientes([...pacientes, nuevoPaciente]);
+    changeVisible();
+
+    setPaciente('');
+    setPropietario('');
+    setEmail('');
+    setTelefono('');
+    setFecha(new Date());
+    setSintomas('');
+  }
 
   return (
     <Modal animationType="slide" visible={isVisible}>
@@ -44,7 +76,7 @@ function Formulario({isVisible, changeVisible}): React.JSX.Element {
               placeholder="Milanezo"
               placeholderTextColor={'#666'}
               value={paciente}
-              onChange={setPaciente}
+              onChangeText={setPaciente}
             />
           </View>
           <View style={styles.campo}>
@@ -55,7 +87,7 @@ function Formulario({isVisible, changeVisible}): React.JSX.Element {
               placeholder="Propietario"
               placeholderTextColor={'#666'}
               value={propietario}
-              onChange={setPropietario}
+              onChangeText={setPropietario}
             />
           </View>
           <View style={styles.campo}>
@@ -66,7 +98,7 @@ function Formulario({isVisible, changeVisible}): React.JSX.Element {
               placeholder="Solobino@gmail.com"
               placeholderTextColor={'#666'}
               value={email}
-              onChange={setEmail}
+              onChangeText={setEmail}
             />
           </View>
           <View style={styles.campo}>
@@ -77,12 +109,12 @@ function Formulario({isVisible, changeVisible}): React.JSX.Element {
               placeholder="Telefono Propietario"
               placeholderTextColor={'#666'}
               value={telefono}
-              onChange={setTelefono}
+              onChangeText={setTelefono}
               maxLength={10}
             />
           </View>
           <View style={styles.campo}>
-            <Text style={styles.label}>Fecha Citas</Text>
+            <Text style={styles.label}>Fecha Cita</Text>
             <View
               style={styles.contenedorFecha}
             >
@@ -99,11 +131,19 @@ function Formulario({isVisible, changeVisible}): React.JSX.Element {
               placeholder="Sintomas Paciente"
               placeholderTextColor={'#666'}
               value={sintomas}
-              onChange={setSintomas}
+              onChangeText={setSintomas}
               multiline={true}
               numberOfLines={4}
             />
           </View>
+          <Pressable 
+          onPress={handleNuevaCita}
+            style={styles.btnAgregar}
+          >
+            <Text 
+              style={styles.textAgregar}
+            >Agregar Paciente</Text>
+          </Pressable>
         </ScrollView>
       </SafeAreaView>
     </Modal>
@@ -161,6 +201,23 @@ const styles = StyleSheet.create({
   contenedorFecha: {
     borderRadius: 10,
   },
+  btnAgregar: {
+    marginTop: 50,
+    marginBottom: 20,
+    marginHorizontal:30,
+    backgroundColor: '#F59E0B',
+    paddingVertical: 15,
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  textAgregar:{
+    textAlign: 'center',
+    color: '#5827A4',
+    textTransform: 'uppercase',
+    fontWeight: '700',
+    fontSize: 15,
+  }
 });
 
 export default Formulario;
