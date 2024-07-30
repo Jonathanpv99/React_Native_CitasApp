@@ -54,13 +54,13 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.titulo}>Administrador de Citas</Text>
-      <Text style={styles.tituloBold}>Veterinaria</Text>
+      <Text style={styles.tituloBold}>Veterinaria "El DogTor"</Text>
 
       <Pressable
         onPress={handleViewModalCita}
         style={styles.btnNuevaCita}
       >
-        <Text style={styles.textoNuevaCita}>Nuevo Evento</Text>
+        <Text style={styles.textoNuevaCita}>Nueva cita</Text>
       </Pressable>
       {pacientes.length === 0 ? 
         (<Text style={styles.noRegistros}>No se encontraron Pacientes</Text>) :
