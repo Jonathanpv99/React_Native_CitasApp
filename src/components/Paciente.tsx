@@ -6,7 +6,7 @@ import {
     View,
   } from 'react-native';
 
-function Paciente({data, editarPaciente}): React.JSX.Element{
+function Paciente({data, editarPaciente, eliminarPaciente}): React.JSX.Element{
 
     const {paciente, fecha, id} = data;
     
@@ -36,7 +36,10 @@ function Paciente({data, editarPaciente}): React.JSX.Element{
                 </Text>
               </Pressable>
 
-              <Pressable style={[styles.btn, styles.btnELiminar]}>
+              <Pressable 
+                style={[styles.btn, styles.btnELiminar]}
+                onLongPress={ () => eliminarPaciente(id)}
+              >
                 <Text style={styles.textoBtn}>
                   Eliminar
                 </Text>
@@ -74,8 +77,8 @@ const styles = StyleSheet.create({
       marginTop: 20,
     },
     btn: {
-      paddingVertical: 5,
-      paddingHorizontal: 20,
+      paddingVertical: 10,
+      paddingHorizontal: 30,
       borderRadius: 5,
     },
     btnEditar: {

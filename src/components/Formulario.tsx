@@ -12,9 +12,16 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente: pacienteObj}): React.JSX.Element {
+function Formulario({
+  isVisible, 
+  changeVisible,
+  pacientes, 
+  setPacientes, 
+  paciente: pacienteObj,
+  RecetearPaciente
+}): React.JSX.Element {
 
-  const [id, setId] = useState('');
+  const [idPaciente, setIdPaciente] = useState('');
   const [paciente, setPaciente] = useState('');
   const [propietario, setPropietario] = useState('');
   const [email, setEmail] = useState('');
@@ -23,9 +30,9 @@ function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente:
   const [sintomas, setSintomas] = useState('');
 
   useEffect( () => {
-    if(pacienteObj){
+    if(Object.keys(pacienteObj).length > 0){
       const {id, paciente, propietario, email, telefono, fecha, sintomas} = pacienteObj;
-      setId(id);
+      setIdPaciente(id);
       setPaciente(paciente);
       setPropietario(propietario);
       setEmail(email);
@@ -48,7 +55,6 @@ function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente:
     }
 
     const nuevoPaciente = {
-      id: Date.now(),
       paciente, 
       propietario, 
       email, 
@@ -56,10 +62,24 @@ function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente:
       fecha,
       sintomas,
     }
+    //revisar si es registro nuevo o edicíón
+    if(idPaciente){
+      nuevoPaciente.id = idPaciente;
 
-    setPacientes([...pacientes, nuevoPaciente]);
+      const pacientesActualizados = pacientes.map( (p) => 
+        p.id === nuevoPaciente.id ? nuevoPaciente  :
+        p
+      );
+
+      setPacientes(pacientesActualizados);
+      RecetearPaciente({});
+    }else{
+      nuevoPaciente.id = Date.now();
+      setPacientes([...pacientes, nuevoPaciente]);
+    }
+    
     changeVisible();
-
+    setIdPaciente('');
     setPaciente('');
     setPropietario('');
     setEmail('');
@@ -73,13 +93,23 @@ function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente:
       <SafeAreaView style={styles.contenido}>
         <ScrollView>
           <Text style={styles.titulo}>
-            Nueva {''}
+            {pacienteObj.id ? 'Editar ' : 'Nueva '}
             <Text style={styles.tituloBold}>Cita</Text>
           </Text>
 
           <Pressable 
             style={styles.btnCancelar}
-            onLongPress={() => changeVisible()}
+            onLongPress={() => {
+              changeVisible();
+              RecetearPaciente({});
+              setIdPaciente('');
+              setPaciente('');
+              setPropietario('');
+              setEmail('');
+              setTelefono('');
+              setFecha(new Date());
+              setSintomas('');
+                      }}
           >
             <Text style={styles.textCancelar}>Cancelar X</Text>
           </Pressable>
@@ -158,7 +188,7 @@ function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente:
           >
             <Text 
               style={styles.textAgregar}
-            >Agregar Paciente</Text>
+            >{pacienteObj.id ? 'Editar' : 'Agregar'} Paciente</Text>
           </Pressable>
         </ScrollView>
       </SafeAreaView>

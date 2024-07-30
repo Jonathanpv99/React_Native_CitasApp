@@ -5,6 +5,7 @@ import {
   Text,
   Pressable,
   FlatList,
+  Alert,
 } from 'react-native';
 import Formulario from './src/components/Formulario';
 import Paciente from './src/components/Paciente';
@@ -23,9 +24,27 @@ function App(): React.JSX.Element {
   const handleEditarPaciente = (id) => {
     const pacienteEditar = pacientes.filter(paciente => paciente.id === id);
     if(pacienteEditar[0]){
-      handleViewModalCita();
       setPacienteEditar(pacienteEditar[0]);
+      handleViewModalCita();
     }
+  }
+
+  const handleEliminarPaciente = (id) => {
+    console.log('eliminando', id);
+    Alert.alert(
+      'Deseas eliminar este paciente?',
+      'Un paciente eliminado no se puede recuperar',
+      [
+        {text: 'Cancelar', style:'cancel'},
+        {text: 'Si, Eliminar', onPress: () => {
+          const pacientesActualizados = pacientes.filter(
+            p => p.id !== id
+          );
+
+          setPacientes(pacientesActualizados);
+        }}
+      ]
+    )
   }
 
   return (
@@ -50,6 +69,7 @@ function App(): React.JSX.Element {
               <Paciente
                 data={item}
                 editarPaciente={handleEditarPaciente}
+                eliminarPaciente={handleEliminarPaciente}
               />
             )
           }}
@@ -61,6 +81,7 @@ function App(): React.JSX.Element {
         pacientes={pacientes}
         setPacientes={setPacientes}
         paciente={pacienteEditar}
+        RecetearPaciente={setPacienteEditar}
       />
     </SafeAreaView>
   );
