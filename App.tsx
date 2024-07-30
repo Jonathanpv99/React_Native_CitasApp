@@ -6,15 +6,19 @@ import {
   Pressable,
   FlatList,
   Alert,
+  Modal,
 } from 'react-native';
 import Formulario from './src/components/Formulario';
 import Paciente from './src/components/Paciente';
+import InfoPaciente from './src/components/InfoPaciente';
 
 function App(): React.JSX.Element {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [pacientes, setPacientes] = useState([]);
   const [pacienteEditar, setPacienteEditar] = useState({})
+  const [pacienteVer, setPacienteVer] = useState({})
+  const [modalPaciente, setModalPaciente] = useState(false);
 
 
   const handleViewModalCita = () => {
@@ -70,12 +74,15 @@ function App(): React.JSX.Element {
                 data={item}
                 editarPaciente={handleEditarPaciente}
                 eliminarPaciente={handleEliminarPaciente}
+                setPaciente={setPacienteVer}
+                pacienteView={setModalPaciente}
               />
             )
           }}
         />)
       }
-      <Formulario
+      {modalVisible && (
+        <Formulario
         isVisible={modalVisible}
         changeVisible={handleViewModalCita}
         pacientes={pacientes}
@@ -83,6 +90,18 @@ function App(): React.JSX.Element {
         paciente={pacienteEditar}
         RecetearPaciente={setPacienteEditar}
       />
+      )}
+
+      <Modal
+        visible={modalPaciente}
+      >
+        
+        <InfoPaciente
+          data={pacienteVer}
+          pacienteView={setModalPaciente}
+          setPaciente={setPacienteVer}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }
