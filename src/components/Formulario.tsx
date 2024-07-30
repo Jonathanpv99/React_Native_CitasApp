@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Modal,
   StyleSheet,
@@ -12,14 +12,29 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-function Formulario({isVisible, changeVisible,pacientes, setPacientes}): React.JSX.Element {
+function Formulario({isVisible, changeVisible,pacientes, setPacientes, paciente: pacienteObj}): React.JSX.Element {
 
+  const [id, setId] = useState('');
   const [paciente, setPaciente] = useState('');
   const [propietario, setPropietario] = useState('');
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');
   const [fecha, setFecha] = useState(new Date());
   const [sintomas, setSintomas] = useState('');
+
+  useEffect( () => {
+    if(pacienteObj){
+      const {id, paciente, propietario, email, telefono, fecha, sintomas} = pacienteObj;
+      setId(id);
+      setPaciente(paciente);
+      setPropietario(propietario);
+      setEmail(email);
+      setTelefono(telefono);
+      setFecha(fecha);
+      setSintomas(sintomas);
+    }
+  },[pacienteObj]);
+
 
   const handleNuevaCita = () => {
     if([paciente, propietario, email, telefono, sintomas].includes('')){
@@ -33,6 +48,7 @@ function Formulario({isVisible, changeVisible,pacientes, setPacientes}): React.J
     }
 
     const nuevoPaciente = {
+      id: Date.now(),
       paciente, 
       propietario, 
       email, 

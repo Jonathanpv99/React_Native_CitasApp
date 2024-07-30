@@ -7,16 +7,26 @@ import {
   FlatList,
 } from 'react-native';
 import Formulario from './src/components/Formulario';
+import Paciente from './src/components/Paciente';
 
 function App(): React.JSX.Element {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [pacientes, setPacientes] = useState([]);
+  const [pacienteEditar, setPacienteEditar] = useState({})
 
 
   const handleViewModalCita = () => {
     setModalVisible(!modalVisible);
   };
+
+  const handleEditarPaciente = (id) => {
+    const pacienteEditar = pacientes.filter(paciente => paciente.id === id);
+    if(pacienteEditar[0]){
+      handleViewModalCita();
+      setPacienteEditar(pacienteEditar[0]);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,13 +41,26 @@ function App(): React.JSX.Element {
       </Pressable>
       {pacientes.length === 0 ? 
         (<Text style={styles.noRegistros}>No se encontraron Pacientes</Text>) :
-        (<Text style={styles.noRegistros}>Si hay Pacientes</Text>)
+        (<FlatList
+        style={styles.lista}
+          data={pacientes}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => {
+            return (
+              <Paciente
+                data={item}
+                editarPaciente={handleEditarPaciente}
+              />
+            )
+          }}
+        />)
       }
       <Formulario
         isVisible={modalVisible}
         changeVisible={handleViewModalCita}
         pacientes={pacientes}
         setPacientes={setPacientes}
+        paciente={pacienteEditar}
       />
     </SafeAreaView>
   );
@@ -83,6 +106,10 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 15,
   },
+  lista: {
+    marginTop: 50,
+    marginHorizontal: 30,
+  }
 });
 
 //presionables
